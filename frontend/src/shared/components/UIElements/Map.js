@@ -1,5 +1,4 @@
 import React, { useRef, useEffect } from 'react'
-import PropTypes from 'prop-types'
 
 import './Map.css'
 
@@ -21,7 +20,5 @@ const Map = props => {
     <div ref={mapRef} className={`map ${props.className}`} style={props.style}>Map</div>
   )
 }
-
-Map.propTypes = {}
 
 export default Map
