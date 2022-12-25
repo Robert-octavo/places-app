@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, useEffect } from 'react';
 
 import { validate } from '../../util/validators';
 
@@ -35,6 +35,10 @@ const Input = props => {
     
     //This is the dispatch function that is called when the input changes (i.e. when the user types in the input field or text area). It takes an action object as an argument. The action object has a type property which is a string that describes the action that is being performed. In this case, the action is 'CHANGE'. The action object also has a val property which is the value of the input field or text area (i.e. the value of the event.target.value property). The dispatch function then calls the reducer function with the action object as an argument. The reducer function then returns a new state object (i.e. the new value and isValid properties of the inputState object). The dispatch function then updates the inputState object with the new state object (i.e. the new value and isValid properties of the inputState object). The dispatch function then calls the inputHandler function (i.e. the function that is passed in as a prop to the Input component) with the new state object (i.e. the new value and isValid properties of the inputState object) as an argument. The inputHandler function then updates the state of the form component (i.e. the state of the form component is updated with the new value and isValid properties of the inputState object). The form component then re-renders and the new value and isValid properties of the inputState object are passed to the Input component as props. The Input component then re-renders and the new value and isValid properties of the inputState object are displayed in the input field or text area. The inputHandler function is also called when the form is submitted. The inputHandler function then updates the state of the form component (i.e. the state of the form component is updated with the new value and isValid properties of the inputState object). The form component then re-renders and the new value and isValid properties of the inputState object are passed to the Input component as props. The Input component then re-renders and the new value and isValid properties of the inputState object are displayed in the input field or text area. The inputHandler function is also called when the form is submitted. The inputHandler function then updates the state of the form component (i.e. the state of the form component is updated with the new value and isValid properties of the inputState object). The form component then re-renders and the new value and isValid properties of the inputState object are passed to the Input component as props. The Input component then re-renders and the new value and isValid properties of the inputState object are displayed in the input field or text area. 
   };
+
+  useEffect(() => {
+    props.onInput(props.id, inputState.value, inputState.isValid)
+  }, [props.id, inputState.value, inputState.isValid, props.onInput]);
 
   const touchHandler = () => {
     dispatch({
