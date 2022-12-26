@@ -46,7 +46,7 @@ const NewPlace = () => {
   }
 );
 
-  const  inputHandler = useCallback((id, value, isValid) => {
+  const inputHandler = useCallback((id, value, isValid) => {
     console.log(id, value, isValid);
     dispatch({
       type: 'INPUT_CHANGE',
@@ -60,8 +60,13 @@ const NewPlace = () => {
   //   console.log(id, value, isValid);
   // }, []);
 
+  const placeSubmitHandler = event => {
+    event.preventDefault();
+    console.log(formState.inputs); // send this to the backend
+  };
+
   return (
-    <form className="place-form" action="">
+    <form className="place-form" action="" onSubmit={placeSubmitHandler}>
       <Input 
         id="title"
         element="input" 
@@ -77,6 +82,14 @@ const NewPlace = () => {
         label="Title" 
         validators={[VALIDATOR_MINLENGTH(5)]}
         errorText="Please enter a valid description (at least 5 caracthers)"
+        onInput={inputHandler}
+      />
+      <Input
+        id="address"
+        element="input"
+        label="Address"
+        validators={[VALIDATOR_REQUIRE()]}
+        errorText="Please enter a valid address"
         onInput={inputHandler}
       />
       <Button type="submit" disabled={!formState.isValid}>ADD PLACE</Button>
