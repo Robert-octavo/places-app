@@ -25,7 +25,11 @@ const inputReducer = (state, action) => {
 
 const Input = props => {
 
-  const [inputState, dispatch] = useReducer(inputReducer, {value: '', isTouched: false, isValid: false}); // This is a hook that allows us to use the reducer function
+  const [inputState, dispatch] = useReducer(inputReducer, {
+    value: props.initialValue || '', 
+    isTouched: false, 
+    isValid: props.initialValid || false
+  }); // This is a hook that allows us to use the reducer function
 
   const changeHandler = event => {
     dispatch({
