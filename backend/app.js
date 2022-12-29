@@ -16,7 +16,7 @@ app.use((error, req, res, next) => {
     }
     res.status(error.code || 500);
     res.json({ message: error.message || 'An unknown error occurred!' });
-});S
+});
 
 // app.use(bodyParser.json());
 // app.use(bodyParser.urlencoded({ extended: false }));
