@@ -122,7 +122,7 @@ const createPlace = async (req, res, next) => {
   res.status(201).json({ Place: createdPlace }); // => { Place: { title: 'Empire State Building', description: 'One of the most famous sky scrapers in the world!', location: { lat: 40.7484405, lng: -73.9878584 }, address: '20 W 34th St, New York, NY 10001', creator: 'u1' } }
 };
 
-const updatePlaceById = (req, res, next) => {
+const updatePlaceById = async (req, res, next) => {
 
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -131,12 +131,34 @@ const updatePlaceById = (req, res, next) => {
 
   const { title, description } = req.body;
   const placeId = req.params.pid;
-  const updatedPlace = { ...DUMMY_PLACES.find(p => p.id === placeId) };
-  const placeIndex = DUMMY_PLACES.findIndex(p => p.id === placeId);
-  updatedPlace.title = title;
-  updatedPlace.description = description;
-  DUMMY_PLACES[placeIndex] = updatedPlace;
-  res.status(200).json({ Place: updatedPlace });
+  // const updatedPlace = { ...DUMMY_PLACES.find(p => p.id === placeId) };
+  // const placeIndex = DUMMY_PLACES.findIndex(p => p.id === placeId);
+
+  let place;
+  try {
+    place = await Place.findById(placeId);
+  } catch (err) {
+    const error = new HttpError(
+      'Something went wrong, could not update place.',
+      500
+    );
+    return next(error);
+  }
+
+  place.title = title;
+  place.description = description;
+  // DUMMY_PLACES[placeIndex] = updatedPlace;
+  try {
+    await place.save();
+  } catch (err) {
+    const error = new HttpError(
+      'Something went wrong, could not update place.',
+      500
+    );
+    return next(error);
+  }
+
+  res.status(200).json({ place: place.toObject({ getters: true }) });
 };
 
 const deletePlaceById = (req, res, next) => {
