@@ -52,18 +52,27 @@ const getPlaceById =async (req, res, next) => {
   res.json({ place: place.toObject({ getters: true }) }); // getters: true => to get the id instead of _id
 };
 
-const getPlacesByUserId = (req, res, next) => {
+const getPlacesByUserId = async (req, res, next) => {
   const userId = req.params.uid; // { uid: 'u1' }
-  const places = DUMMY_PLACES.filter(p => {
-    return p.creator === userId;
-  });
+
+  // const places = DUMMY_PLACES.filter(p => {
+  //   return p.creator === userId;
+  // });
+
+  let places;
+  try {
+    places = await Place.find({ creator: userId });
+  } catch (err) {
+    const error = new HttpError('Something went wrong, could not find places.', 500);
+    return next(error);
+  }
 
   if (!places || places.length === 0) {
     const error = 'Could not find places for the provided user id.';
     return next( new HttpError(error, 404));
   }
 
-  res.json({ Places: places }); // => { Place: { id: 'p1', title: 'Empire State Building', description: 'One of the most famous sky scrapers in the world!', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/1/10/Empire_State_Building_%28aerial_view%29.jpg', address: '20 W 34th St, New York, NY 10001', location: { lat: 40.7484405, lng: -73.9878584 }, creator: 'u1' } }
+  res.json({ places: places.map(place => place.toObject({ getters: true })) }); 
 };
 
 const createPlace = async (req, res, next) => {
