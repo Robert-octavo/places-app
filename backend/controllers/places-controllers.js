@@ -147,6 +147,8 @@ const updatePlaceById = async (req, res, next) => {
 
   place.title = title;
   place.description = description;
+  // updatedPlace.title = title;
+  // updatedPlace.description = description;
   // DUMMY_PLACES[placeIndex] = updatedPlace;
   try {
     await place.save();
