@@ -72,9 +72,7 @@ const Auth = () => {
           }
         );
         auth.login();
-      } catch (err) {
-        
-      }
+      } catch (err) {} // the error is handled by the useHttpClient hook
     } else {
       try {
         await sendRequest(
@@ -90,7 +88,7 @@ const Auth = () => {
           }
         );
         auth.login();
-      } catch (err) {}
+      } catch (err) {} // the error is handled by the useHttpClient hook
     }
   };
 
