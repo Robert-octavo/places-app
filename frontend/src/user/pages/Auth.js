@@ -8,14 +8,14 @@ import { useForm } from '../../shared/hooks/form-hook';
 import { AuthContext } from '../../shared/context/auth-context';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
+import { useHttpClient } from '../../shared/hooks/http-hook';
 
 import './Auth.css';
 
 const Auth = () => {
   const auth = useContext(AuthContext); // auth is an object with isLoggedIn, login, and logout
   const [isLoginMode, setIsLoginMode] = useState(true); // true means that we are in login mode
-  const [isLoading, setIsLoading] = useState(false); // loading state for the spinner
-  const [error, setError] = useState(); // error state for the error message
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
   const [formState, inputHandler, setFormData] = useForm(
     {
@@ -58,66 +58,45 @@ const Auth = () => {
   const authSubmitHandler = async event => {
     event.preventDefault();
     // console.log(formState.inputs); // send this to the backend!
-    setIsLoading(true); // show the spinner
-
     if (isLoginMode) {
       try {
-        const response = await fetch('http://localhost:5000/api/users/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
+        await sendRequest(
+          'http://localhost:5000/api/users/login',
+          'POST',
+          JSON.stringify({
             email: formState.inputs.email.value,
             password: formState.inputs.password.value
-          })
-        });
-        const responseData = await response.json();
-
-        if (!response.ok) {
-          throw new Error(responseData.message);
-        }
-
-        setIsLoading(false); // hide the spinner
+          }),
+          {
+            'Content-Type': 'application/json'
+          }
+        );
         auth.login();
       } catch (err) {
-        setIsLoading(false); // hide the spinner
-        setError(err.message || 'Something went wrong, please try again.');
+        
       }
     } else {
       try {
-        const response = await fetch('http://localhost:5000/api/users/signup', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
+        await sendRequest(
+          'http://localhost:5000/api/users/signup',
+          'POST',
+          JSON.stringify({
             name: formState.inputs.name.value,
             email: formState.inputs.email.value,
             password: formState.inputs.password.value
-          })
-        });
-        const responseData = await response.json();
-
-        if (!response.ok) {
-          throw new Error(responseData.message);
-        }
-
-        console.log(responseData);
-        setIsLoading(false); // hide the spinner
+          }),
+          {
+            'Content-Type': 'application/json'
+          }
+        );
         auth.login();
-      } catch (err) {
-        console.log(err);
-        setIsLoading(false); // hide the spinner
-        setError(err.message || 'Something went wrong, please try again.');
-      }
+      } catch (err) {}
     }
-    
   };
 
   return (
     <React.Fragment>
-      <ErrorModal error={error} onClear={() => setError(null)} />
+      <ErrorModal error={error} onClear={clearError} />
       <Card className="authentication">
         {isLoading && <LoadingSpinner asOverlay />} {/* show the spinner */}
         <h2>Login Required</h2>
