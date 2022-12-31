@@ -1,23 +1,23 @@
-const { v4: uuidv4 } = require('uuid');
+// const { v4: uuidv4 } = require('uuid');
 const HttpError = require('../models/http-error');
 const { validationResult } = require('express-validator');
 
 const User = require('../models/user');
 
-let DUMMY_USERS = [
-  {
-    id: 'u1',
-    name: 'Max Schwarz',
-    email: 'example@example.com',
-    password: 'test'
-  },
-  {
-    id: 'u2',
-    name: 'Robert Ortega',
-    email: 'Test2@example.com',
-    password: 'test'
-  }
-]
+// let DUMMY_USERS = [
+//   {
+//     id: 'u1',
+//     name: 'Max Schwarz',
+//     email: 'example@example.com',
+//     password: 'test'
+//   },
+//   {
+//     id: 'u2',
+//     name: 'Robert Ortega',
+//     email: 'Test2@example.com',
+//     password: 'test'
+//   }
+// ]
 
 const getUsers = async (req, res, next) => {
   let users;
@@ -39,7 +39,7 @@ const signup = async (req, res, next) => {
     return next(new HttpError('Invalid inputs passed, please check your data.', 422));
   }
 
-  const { name, email, password } = req.body;
+  const { name, email, password, places } = req.body;
 
   let existingUser;
   try {
