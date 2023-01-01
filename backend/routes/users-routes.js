@@ -1,6 +1,7 @@
 const express = require('express');
 const userControllers = require('../controllers/users-controllers');
 const { check } = require('express-validator');
+const fileUpload = require('../middleware/file-upload');
 
 const router = express.Router();
 
@@ -8,6 +9,7 @@ const router = express.Router();
 router.get('/', userControllers.getUsers);
 router.post(
   '/signup',
+  fileUpload.single('image'),
   [
     check('name').notEmpty(),
     check('email').normalizeEmail().isEmail(),
