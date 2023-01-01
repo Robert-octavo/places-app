@@ -55,7 +55,10 @@ const NewPlace = () => {
       await sendRequest(
         'http://localhost:5000/api/places', 
         'POST', 
-        formData
+        formData,
+        {
+          Authorization: 'Bearer ' + auth.token
+        }
       );
       history.push('/'); // redirect the user to the root page
     } catch (err) {} // error is handled by the useHttpClient hook
