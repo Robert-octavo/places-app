@@ -9,6 +9,7 @@ import { AuthContext } from '../../shared/context/auth-context';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 import { useHttpClient } from '../../shared/hooks/http-hook';
+import ImageUpload from '../../shared/components/FormElements/ImageUpload';
 
 import './Auth.css';
 
@@ -36,7 +37,8 @@ const Auth = () => {
       setFormData(
         {
           ...formState.inputs,
-          name: undefined
+          name: undefined,
+          image: undefined
         },
         formState.inputs.email.isValid && formState.inputs.password.isValid
       );
@@ -46,6 +48,10 @@ const Auth = () => {
           ...formState.inputs,
           name: {
             value: '',
+            isValid: false
+          },
+          image: {
+            value: null,
             isValid: false
           }
         },
@@ -57,7 +63,7 @@ const Auth = () => {
 
   const authSubmitHandler = async event => {
     event.preventDefault();
-    // console.log(formState.inputs); // send this to the backend!
+    console.log(formState.inputs); // send this to the backend!
     if (isLoginMode) {
       try {
         const responseData = await sendRequest(
@@ -111,7 +117,7 @@ const Auth = () => {
               onInput={inputHandler}
             />
           )}
-
+          {!isLoginMode && <ImageUpload center id="image" onInput={inputHandler} errorText="Please provide an image." /> }
           <Input
             id="email"
             element="input"
