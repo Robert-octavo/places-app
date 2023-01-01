@@ -2,6 +2,9 @@ import HttpError from "../models/http-error";
 const jwt = require('jsonwebtoken');
 
 module.exports = (req, res, next) => {
+  if (req.method === 'OPTIONS') { // OPTIONS is a special method that is used to check if the server is alive
+    return next();
+  }
   try {
     const token = req.headers.authorization.split(' ')[1]; // Authorization header: 'Bearer TOKEN'
     if (!token) {
