@@ -1,4 +1,5 @@
 // const { v4: uuidv4 } = require('uuid');
+const fs = require('fs');
 const mongoose = require('mongoose');
 const HttpError = require('../models/http-error');
 const { validationResult } = require('express-validator');
@@ -206,6 +207,8 @@ const deletePlaceById = async (req, res, next) => {
     return next(error);
   }
   
+  const imagePath = place.image;
+
   try {
     // await place.remove();
     const sess = await mongoose.startSession();
@@ -221,7 +224,10 @@ const deletePlaceById = async (req, res, next) => {
     );
     return next(error);
   }
-
+  
+  fs.unlink(imagePath, err => {
+    console.log(err);
+  });
   // if (!DUMMY_PLACES.find(p => p.id === placeId)) {
   //   throw new HttpError('Could not find a place for that id.', 404);
   // }
